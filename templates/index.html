@@ -1,19 +1,100 @@
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>TEX_LESSON</title>
 </head>
 <body>
+<div class="container">
+    <div class="row" style="margin-top: 60px">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title" style="text-align: center">Server info</h1>
+                    <p class="card-text">Server status: <span id="status" style="color: greenyellow"></span></p><p class="card-text"></p>
+                    <p class="card-text">Server time: <span id="time"></span></p>
+                    <h2 style="text-align: center">Conveyer belts statistic</h2>
+                    <p class="card-text">Conveyer belt 1: <span id="conveyer_1"></span> u/ps</p>
+                    <p class="card-text">Conveyer belt 2: <span id="conveyer_2"></span> u/ps</p>
+                    <p class="card-text">Conveyer belt 3: <span id="conveyer_3"></span> u/ps</p>
+                    <h2 style="text-align: center">Furnace statistic</h2>
+                    <p class="card-text">Furnace: <span id="furnace"></span></p>
+                </div>
+            </div>
+            <div class="card" style="margin-top: 60px">
+                <div class="card-body">
+                    <h1 class="card-title" style="text-align: center;">Flask uses in</h1>
+                    <div class="row" style="justify-content: space-around;">
+                        <div class="col-2">
+                            <div class="company">
+                                <img src="https://img.stackshare.io/stack/34/thumb_retina_4e2a0effe8c6355070a5df9bec549edbea391be5.png" alt="">
+                                <p> NETFLIX </p>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="company">
+                                <img src="https://img.stackshare.io/stack/233/thumb_retina_7043e7781d5db91b69e455f293143388fddfcbb1.png" alt="">
+                                <p> Reddit </p>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="company">
+                                <img src="https://img.stackshare.io/stack/14995/thumb_retina_fc70dacd7d8c4ea67e8d7041f4a0b23b6a602513.png" alt="">
+                                <p>Patreon</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <script>
     const evtSource = new EventSource("http://127.0.0.1:9090/api/time", {
         withCredentials: false,
     });
-    evtSource.onmessage = (event) => {
-        console.log(event.data);
+    evtSource.onmessage = function(event){
+        document.getElementById('time').innerHTML = event.data
+    }
+    const status = new EventSource("http://127.0.0.1:9090/api/status", {
+        withCredentials: false,
+    })
+    status.onmessage = function(event){
+        document.getElementById('status').style.color = 'greenyellow'
+        document.getElementById('status').innerHTML = event.data
+    }
+    status.onerror = function(){
+        document.getElementById('status').style.color = 'red'
+        document.getElementById('status').innerHTML = 'Error'
+    }
+    const conveyer_1 = new EventSource("http://127.0.0.1:9090/api/conveyer_1", {
+        withCredentials: false,
+    })
+    conveyer_1.onmessage = function(event){
+        document.getElementById('conveyer_1').innerHTML = event.data
+    }
+    const conveyer_2 = new EventSource("http://127.0.0.1:9090/api/conveyer_2", {
+        withCredentials: false,
+    })
+    conveyer_2.onmessage = function(event){
+        document.getElementById('conveyer_2').innerHTML = event.data
+    }
+    const conveyer_3 = new EventSource("http://127.0.0.1:9090/api/conveyer_3", {
+        withCredentials: false,
+    })
+    conveyer_3.onmessage = function(event){
+        document.getElementById('conveyer_3').innerHTML = event.data
+    }
+    const furnace = new EventSource("http://127.0.0.1:9090/api/furnace", {
+        withCredentials: false,
+    })
+    furnace.onmessage = function(event){
+        document.getElementById('furnace').innerHTML = event.data
     }
 </script>
 </body>
